@@ -103,7 +103,7 @@ write.csv(dfSumS,paste0("u:/Vyzkum/17318_NAZV_E3D/3_zpracovani/METODIKA/LUBY_pri
 #v jednom grafu je 1 varianta a všechny UP
 
 for (i in 1:length(varianty)) {
-  jpeg(file=paste0("graf_prutoku",i,".jpeg"))
+  jpeg(file=paste0("u:/Vyzkum/17318_NAZV_E3D/3_zpracovani/METODIKA/obrazky/LUBY_graf_prutoku",i,".jpeg"))
   #generovani prutoku - rada prutoku v m3*s-1 za kazdy krok (nekumulativne)
   Prutoky <- varianty[[i]] %>% 
     group_by(ID) %>% mutate(Q = lag(lead(Runoff,1) - Runoff), Q_ms = Q * rozliseni / 5 / 60) %>% 
