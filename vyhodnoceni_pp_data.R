@@ -103,7 +103,7 @@ write.csv(dfSumS,paste0("u:/Vyzkum/17318_NAZV_E3D/3_zpracovani/METODIKA/LUBY_pri
 #v jednom grafu je 1 varianta a všechny UP
 
 for (i in 1:length(varianty)) {
-  jpeg(file=paste0("u:/Vyzkum/17318_NAZV_E3D/3_zpracovani/METODIKA/obrazky/LUBY_graf_prutoku",i,".jpeg"))
+  png(file=paste0("u:/Vyzkum/17318_NAZV_E3D/3_zpracovani/METODIKA/obrazky/LUBY_graf_prutoku",i,".png"))
   #generovani prutoku - rada prutoku v m3*s-1 za kazdy krok (nekumulativne)
   Prutoky <- varianty[[i]] %>% 
     group_by(ID) %>% mutate(Q = lag(lead(Runoff,1) - Runoff), Q_ms = Q * rozliseni / 5 / 60) %>% 
@@ -111,12 +111,12 @@ for (i in 1:length(varianty)) {
   
   #definice grafu
   Prutokova_rada <- Prutoky[Prutoky$ID==1,]
-  plot(Prutokova_rada$Time, Prutokova_rada$Q_ms,col="white", xlab="čas", ylab='průtok (m3*s-1)')
+  plot(seq(0,(length(Prutokova_rada$Time)*5)-5,5), as.vector(Prutokova_rada$Q_ms),col="white", xlab="čas [min]", type="l", ylab=expression('průtok (m'^3*'s'^-1*')'), ylim=c(0,ceiling(max(dfMaxQ[,i]))))
   
   #generovani lajn pro jednotliva ID
   for (j in 1:pp) {
     Prutokova_rada <- Prutoky[Prutoky$ID==j,] #rada prutoku jen pro jedno ID
-    lines(Prutokova_rada$Time, Prutokova_rada$Q_ms, col=j) #pridani rady do grafu
+    lines(seq(0,(length(Prutokova_rada$Time)*5)-5,5), Prutokova_rada$Q_ms, col=j) #pridani rady do grafu
   }
   legend("topright",legend=c("UP1 - kukuřice/tráva", "UP2 - tráva/intravilán", "UP3 - průleh"), col = c("black","red","green"), lty=c(1,1,1),)
   #ulozeni grafu
